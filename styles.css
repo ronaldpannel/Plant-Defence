@@ -1,0 +1,24 @@
+*{
+    padding: 0;
+    margin: o;
+    box-sizing: border-box;
+}
+body{
+   background-color: black;
+    overflow: hidden;
+}
+
+.canvas1{
+    background: url(background.png);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: 2px solid white;
+    /* max-width: 100%;
+    max-height: 100%; */
+   
+}
+img{
+    display: none;
+}
