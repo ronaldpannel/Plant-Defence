@@ -314,6 +314,19 @@ class Game {
       if (e.key === "d") this.debug = !this.debug;
       if (e.key === "f") this.player.shoot();
     });
+    this.canvas.addEventListener("touchstart", (e) => {
+      e.preventDefault();
+      this.player.shoot();
+
+      //  this.touchStartX = e.changedTouches[0].pageX;
+    });
+    this.canvas.addEventListener("touchmove", (e) => {
+      e.preventDefault();
+      console.log(e);
+      this.pointer.x = changedTouches[0].pageX;
+      this.pointer.y = changedTouches[0].pageY;
+      //  this.touchStartX = e.changedTouches[0].pageX;
+    });
   }
   render(context, deltaTime) {
     this.planet.draw(context);
