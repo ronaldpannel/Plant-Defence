@@ -41,7 +41,7 @@ class Player {
     context.restore();
   }
   update() {
-    this.aim = this.game.calcAim(this.game.planet, this.game.pointer);
+    this.aim = this.game.calcAim(this.game.planet, this.game.mouse);
     this.x =
       this.game.planet.x +
       (this.game.planet.radius + this.radius) * this.aim[0];
@@ -295,8 +295,9 @@ class Game {
     this.score = 0;
     this.winningScore = 50;
     this.lives = 30;
+    this.touchStartX;
 
-    this.pointer = {
+    this.mouse = {
       x: 0,
       y: 0,
     };
@@ -305,9 +306,10 @@ class Game {
     window.addEventListener("click", (e) => {
       this.player.shoot();
     });
-    window.addEventListener("pointermove", (e) => {
-      this.pointer.x = e.offsetX;
-      this.pointer.y = e.offsetY;
+    window.addEventListener("mousemove", (e) => {
+      this.mouse.x = e.offsetX;
+      this.mouse.y = e.offsetY;
+      console.log(e.offsetX, e.offsetY);
     });
 
     window.addEventListener("keyup", (e) => {
@@ -317,18 +319,20 @@ class Game {
     this.canvas.addEventListener("touchstart", (e) => {
       e.preventDefault();
       this.player.shoot();
-
-      //  this.touchStartX = e.changedTouches[0].pageX;
     });
     this.canvas.addEventListener("touchmove", (e) => {
       e.preventDefault();
       console.log(e);
-      this.pointer.x = changedTouches[0].pageX;
-      this.pointer.y = changedTouches[0].pageY;
-      //  this.touchStartX = e.changedTouches[0].pageX;
+      this.mouse.x = e.changedTouches[0].pageX;
+      this.mouse.y = e.changedTouches[0].pageY;
+    });
+    this.canvas.addEventListener("touchend", (e) => {
+      e.preventDefault();
+      this.player.shoot();
     });
   }
   render(context, deltaTime) {
+    context.beginPath();
     this.planet.draw(context);
     this.drawStatusText(context);
     this.player.draw(context);
@@ -373,7 +377,7 @@ class Game {
     context.font = "30px Impact";
     context.fillText(`Score ${this.score}`, 20, 30);
     for (let i = 0; i < this.lives; i++) {
-      context.fillRect(20 + 15 * i, 60, 10, 30);
+      context.fillRect(190 + 15 * i, 15, 10, 30);
     }
     if (this.gameOver) {
       context.textAlign = "center";
@@ -446,8 +450,8 @@ class Game {
 window.addEventListener("load", function () {
   const canvas = document.getElementById("canvas1");
   const ctx = canvas.getContext("2d");
-  canvas.width = 800;
-  canvas.height = 800;
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
 
   ctx.fillStyle = "white";
   ctx.strokeStyle = "white";
